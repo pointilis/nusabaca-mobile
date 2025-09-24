@@ -4,6 +4,11 @@
       <ion-back-button defaultHref="/tabs/home"></ion-back-button> 
     </ion-buttons>
     <ion-title>Book Details</ion-title>
+    <ion-buttons slot="end" class="pr-1">
+      <ion-button shape="round" (click)="presentActionSheet()">
+        <ion-icon name="ellipsis-vertical" slot="icon-only" class="text-2x"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

@@ -6,8 +6,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Endpoints } from 'src/app/utils/endpoints';
 import { AuthService } from 'src/app/utils/services/auth';
 import { Router } from '@angular/router';
-
-
+import { Location } from '@angular/common';
+import { ToastController } from '@ionic/angular';
 
 @Injectable()
 export class AppEffects {
@@ -17,7 +17,19 @@ export class AppEffects {
     private httpClient: HttpClient,
     private authService: AuthService,
     private router: Router,
+    private location: Location,
+    private toastCtrl: ToastController,
   ) {}
+
+  async presentToast(message: string, duration: number = 2000, color: string = 'primary') {
+    const toast = await this.toastCtrl.create({
+      message,
+      duration,
+      position: 'bottom',
+      color
+    });
+    await toast.present();
+  }
 
   // ...
   // Sign Up Effect
@@ -47,6 +59,7 @@ export class AppEffects {
         console.log('Sign Up Successful:', data);
         await this.authService.saveSignUpData(data);
         this.router.navigate(['/tabs/home'], { replaceUrl: true });
+        this.presentToast('Sign Up Successful!', 2000, 'success');
       })
     ), { dispatch: false }
   );
@@ -56,6 +69,7 @@ export class AppEffects {
       ofType(AppActions.signUpFailure),
       map(({ error }) => {
         console.error('Sign Up Failed:', error);
+        this.presentToast('Sign Up Failed. Please try again.', 2000, 'danger');
       })
     ), { dispatch: false }
   );
@@ -64,81 +78,83 @@ export class AppEffects {
   // ...
   // Insert Biblio Effect
   // ...
-  insertBiblio$ = createEffect(() =>
+  insertBiblioCollection$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(AppActions.insertBiblio),
+      ofType(AppActions.insertBiblioCollection),
       switchMap(({ data }) => {
         return this.httpClient.post(Endpoints.Collections, data).pipe(
           map((response) => {
-            return AppActions.insertBiblioSuccess({
+            return AppActions.insertBiblioCollectionSuccess({
               data: response,
             });
           }),
           catchError((error: HttpErrorResponse) => {
-            return of(AppActions.insertBiblioFailure({ error: error }))
+            return of(AppActions.insertBiblioCollectionFailure({ error: error }))
           })
         );
       })
     )
   );
 
-  insertBiblioSuccess$ = createEffect(() =>
+  insertBiblioCollectionSuccess$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(AppActions.insertBiblioSuccess),
+      ofType(AppActions.insertBiblioCollectionSuccess),
       map(({ data }) => {
         console.log('Insert Biblio Successful:', data);
         this.router.navigate(['/tabs/home'], { replaceUrl: true });
+        this.presentToast('Book added successfully!', 2000, 'success');
       })
     ), { dispatch: false }
   );
 
-  insertBiblioFailure$ = createEffect(() =>
+  insertBiblioCollectionFailure$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(AppActions.insertBiblioFailure),
+      ofType(AppActions.insertBiblioCollectionFailure),
       map(({ error }) => {
         console.error('Insert Biblio Failed:', error);
+        this.presentToast('Failed to add book.', 2000, 'danger');
       })
     ), { dispatch: false }
   );
 
 
   // ...
-  // Get Collections Effect
+  // Get Biblio Collections Effect
   // ...
-  getCollections$ = createEffect(() =>
+  getBiblioCollections$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(AppActions.getCollections),
+      ofType(AppActions.getBiblioCollections),
       switchMap(({ params, source }) => {
         return this.httpClient.get(Endpoints.Collections, { params }).pipe(
           map((response) => {
-            return AppActions.getCollectionsSuccess({
+            return AppActions.getBiblioCollectionsSuccess({
               data: response,
               params,
               source
             });
           }),
           catchError((error: HttpErrorResponse) => {
-            return of(AppActions.getCollectionsFailure({ error: error, params, source }))
+            return of(AppActions.getBiblioCollectionsFailure({ error: error, params, source }))
           })
         );
       })
     )
   );
 
-  getCollectionsSuccess$ = createEffect(() =>
+  getBiblioCollectionsSuccess$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(AppActions.getCollectionsSuccess),
+      ofType(AppActions.getBiblioCollectionsSuccess),
       map(({ data }) => {
-        console.log('Get Collections Successful:', data);
+        console.log('Get Biblio Collections Successful:', data);
       })
     ), { dispatch: false }
   );
 
-  getCollectionsFailure$ = createEffect(() =>
+  getBiblioCollectionsFailure$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(AppActions.getCollectionsFailure),
+      ofType(AppActions.getBiblioCollectionsFailure),
       map(({ error }) => {
-        console.error('Get Collections Failed:', error);
+        console.error('Get Biblio Collections Failed:', error);
       })
     ), { dispatch: false }
   );
@@ -147,39 +163,129 @@ export class AppEffects {
   // ...
   // Retrieve Collection Effect
   // ...
-  getCollection$ = createEffect(() =>
+  getBiblioCollection$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(AppActions.getCollection),
-      switchMap(({ id }) => {
+      ofType(AppActions.getBiblioCollection),
+      switchMap(({ id, source }) => {
         return this.httpClient.get(Endpoints.RetrieveCollection.replace(':id', id)).pipe(
           map((response) => {
-            return AppActions.getCollectionSuccess({
+            return AppActions.getBiblioCollectionSuccess({
               data: response,
-              id
+              id,
+              source
             });
           }),
           catchError((error: HttpErrorResponse) => {
-            return of(AppActions.getCollectionFailure({ error: error, id }))
+            return of(AppActions.getBiblioCollectionFailure({ error: error, id, source }))
           })
         );
       })
     )
   );
 
-  getCollectionSuccess$ = createEffect(() =>
+  getBiblioCollectionSuccess$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(AppActions.getCollectionSuccess),
+      ofType(AppActions.getBiblioCollectionSuccess),
       map(({ data }) => {
-        console.log('Get Collection Successful:', data);
+        console.log('Get Biblio Collection Successful:', data);
       })
     ), { dispatch: false }
   );
 
-  getCollectionFailure$ = createEffect(() =>
+  getBiblioCollectionFailure$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(AppActions.getCollectionFailure),
+      ofType(AppActions.getBiblioCollectionFailure),
       map(({ error }) => {
-        console.error('Get Collection Failed:', error);
+        console.error('Get Biblio Collection Failed:', error);
+      })
+    ), { dispatch: false }
+  );
+
+
+  // ...
+  // Update Collection Effect
+  // ...
+  updateBiblioCollection$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AppActions.updateBiblioCollection),
+      switchMap(({ id, data, source }) => {
+        return this.httpClient.patch(Endpoints.RetrieveCollection.replace(':id', id), data).pipe(
+          map((response) => {
+            return AppActions.updateBiblioCollectionSuccess({
+              data: response,
+              id,
+              source
+            });
+          }),
+          catchError((error: HttpErrorResponse) => {
+            return of(AppActions.getBiblioCollectionFailure({ error: error, id, source }))
+          })
+        );
+      })
+    )
+  );
+
+  updateBiblioCollectionSuccess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AppActions.updateBiblioCollectionSuccess),
+      map(({ data }) => {
+        console.log('Update Biblio Collection Successful:', data);
+        this.presentToast('Book updated successfully!', 2000, 'success');
+        this.location.back();
+      })
+    ), { dispatch: false }
+  );
+
+  updateBiblioCollectionFailure$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AppActions.updateBiblioCollectionFailure),
+      map(({ error }) => {
+        console.error('Update Biblio Collection Failed:', error);
+        this.presentToast('Failed to update book.', 2000, 'danger');
+      })
+    ), { dispatch: false }
+  );
+
+
+  // ...
+  // Delete Collection Effect
+  // ...
+  deleteBiblioCollection$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AppActions.deleteBiblioCollection),
+      switchMap(({ id, source }) => {
+        return this.httpClient.delete(Endpoints.RetrieveCollection.replace(':id', id)).pipe(
+          map(() => {
+            return AppActions.deleteBiblioCollectionSuccess({
+              id,
+              source
+            });
+          }),
+          catchError((error: HttpErrorResponse) => {
+            return of(AppActions.getBiblioCollectionFailure({ error: error, id, source }))
+          })
+        );
+      })
+    )
+  );
+
+  deleteBiblioCollectionSuccess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AppActions.deleteBiblioCollectionSuccess),
+      map(({ id }) => {
+        console.log('Delete Biblio Collection Successful:', id);
+        this.router.navigate(['/tabs/home'], { replaceUrl: true });
+        this.presentToast('Book deleted successfully!', 2000, 'success');
+      })
+    ), { dispatch: false }
+  );
+
+  deleteBiblioCollectionFailure$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AppActions.deleteBiblioCollectionFailure),
+      map(({ error }) => {
+        console.error('Delete Biblio Collection Failed:', error);
+        this.presentToast('Failed to delete book.', 2000, 'danger');
       })
     ), { dispatch: false }
   );

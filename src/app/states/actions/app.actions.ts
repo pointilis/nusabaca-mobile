@@ -8,16 +8,24 @@ export const AppActions = createActionGroup({
     'Sign Up Success': props<{ data: any }>(),
     'Sign Up Failure': props<{ error: any }>(),
 
-    'Insert Biblio': props<{ data: IInsertBibilo }>(),
-    'Insert Biblio Success': props<{ data: any }>(),
-    'Insert Biblio Failure': props<{ error: any }>(),
+    'Insert Biblio Collection': props<{ data: IInsertBibilo }>(),
+    'Insert Biblio Collection Success': props<{ data: any }>(),
+    'Insert Biblio Collection Failure': props<{ error: any }>(),
 
-    'Get Collections': props<{ params: IPagination, source?: string }>(),
-    'Get Collections Success': props<{ data: any, params: IPagination, source?: string }>(),
-    'Get Collections Failure': props<{ error: any, params: IPagination, source?: string }>(),
+    'Get Biblio Collections': props<{ params: IPagination, source?: string }>(),
+    'Get Biblio Collections Success': props<{ data: any, params: IPagination, source?: string }>(),
+    'Get Biblio Collections Failure': props<{ error: any, params: IPagination, source?: string }>(),
 
-    'Get Collection': props<{ id: string }>(),
-    'Get Collection Success': props<{ data: any, id: string }>(),
-    'Get Collection Failure': props<{ error: any, id: string }>(),
+    'Get Biblio Collection': props<{ id: string, source?: string }>(),
+    'Get Biblio Collection Success': props<{ data: any, id: string, source?: string }>(),
+    'Get Biblio Collection Failure': props<{ error: any, id: string, source?: string }>(),
+
+    'Update Biblio Collection': props<{ id: string, data: IInsertBibilo, source?: string }>(),
+    'Update Biblio Collection Success': props<{ data: any, id: string, source?: string }>(),
+    'Update Biblio Collection Failure': props<{ error: any, id: string, source?: string }>(),
+
+    'Delete Biblio Collection': props<{ id: string, source?: string }>(),
+    'Delete Biblio Collection Success': props<{ id: string, source?: string }>(),
+    'Delete Biblio Collection Failure': props<{ error: any, id: string, source?: string }>(),
   }
 });

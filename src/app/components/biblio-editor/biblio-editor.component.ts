@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Store } from '@ngrx/store';
@@ -19,6 +19,8 @@ import { AppState } from 'src/app/states/reducers/app.reducer';
 })
 export class BiblioEditorComponent  implements OnInit {
 
+  @Input() collection: any = null;
+  
   formGroup: FormGroup = new FormGroup({});
 
   constructor(
@@ -37,6 +39,33 @@ export class BiblioEditorComponent  implements OnInit {
     });
   }
 
+  /**
+   * Trigger fill the form from outside
+   */
+  ngOnChanges() { 
+    if (this.collection) {
+      let publishers = this.collection.publishers;
+      let authors = this.collection.authors;
+      
+      // convert array to string with | delimiter
+      if (Array.isArray(publishers)) {
+        publishers = publishers.join(' | ');
+      }
+
+      if (Array.isArray(authors)) {
+        authors = authors.join(' | ');
+      }
+
+      this.formGroup.patchValue({
+        title: this.collection.title,
+        author: authors,
+        publisher: publishers,
+        publication_year: this.collection.publication_year,
+        total_pages: this.collection.total_pages,
+      });
+    }
+  }
+
   onSubmit() {
     if (this.formGroup.valid) {
       const formData = this.formGroup.value;
@@ -53,7 +82,12 @@ export class BiblioEditorComponent  implements OnInit {
       };
 
       console.log('Processed Data:', processedData);
-      this.store.dispatch(AppActions.insertBiblio({ data: processedData }));
+
+      if (this.collection && this.collection.id) {
+        this.store.dispatch(AppActions.updateBiblioCollection({ id: this.collection.id, data: processedData }));
+      } else {
+        this.store.dispatch(AppActions.insertBiblioCollection({ data: processedData }));
+      }
     }
   }
 

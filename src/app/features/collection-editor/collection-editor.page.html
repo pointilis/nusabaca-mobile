@@ -3,21 +3,21 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabs/home"></ion-back-button> 
     </ion-buttons>
-    <ion-title>Add a Book</ion-title>
+    <ion-title>{{ title }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" color="light">
   <ion-header collapse="condense">
     <ion-toolbar color="light">
-      <ion-title size="large">Add a Book</ion-title>
+      <ion-title size="large">{{ title }}</ion-title>
     </ion-toolbar>
   </ion-header>
 
   <div class="ion-padding">
-    <p class="text-gray-700 text-lg block">You can add a book by filling out the form below.</p>
-    <div class="ion-margin-top">
-      <app-biblio-editor></app-biblio-editor>
+    <p class="text-gray-700 text-lg block">You can {{ title | lowercase }} by filling out the form below.</p>
+    <div class="mt-8">
+      <app-biblio-editor #biblioEditor [collection]="collection"></app-biblio-editor>
     </div>
   </div>
 </ion-content>

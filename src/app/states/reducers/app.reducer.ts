@@ -10,14 +10,22 @@ export interface AppState {
     status: string;
     error: any;
   },
-  biblio: {
+  biblioCollection: {
     insert: {
       data: any;
       status: string;
       error: any;
-    }
-  },
-  collection: {
+    },
+    update: {
+      data: any;
+      status: string;
+      error: any;
+    },
+    delete: {
+      data: any;
+      status: string;
+      error: any;
+    },
     list: {
       data: any;
       status: string;
@@ -38,14 +46,22 @@ export const initialState: AppState = {
     status: Statuses.Idle,
     error: null,
   },
-  biblio: {
+  biblioCollection: {
     insert: {
       data: null,
       status: Statuses.Idle,
       error: null,
-    }
-  },
-  collection: {
+    },
+    update: {
+      data: null,
+      status: Statuses.Idle,
+      error: null,
+    },
+    delete: {
+      data: null,
+      status: Statuses.Idle,
+      error: null,
+    },
     list: {
       data: null,
       status: Statuses.Idle,
@@ -94,49 +110,46 @@ export const appReducer = createReducer(
 
 
   // ...
-  // Insert Biblio
+  // Insert Biblio Collection
   // ...
-  on(AppActions.insertBiblio, (state) => ({
+  on(AppActions.insertBiblioCollection, (state) => ({
     ...state,
-    biblio: {
-      ...state.biblio,
+    biblioCollection: {
+      ...state.biblioCollection,
       insert: {
-        ...state.biblio.insert,
+        ...state.biblioCollection.insert,
         status: Statuses.Loading,
         error: null,
       }
     }
   })),
 
-  on(AppActions.insertBiblioSuccess, (state, { data }) => ({
+  on(AppActions.insertBiblioCollectionSuccess, (state, { data }) => ({
     ...state,
-    biblio: {
-      ...state.biblio,
+    biblioCollection: {
+      ...state.biblioCollection,
       insert: {
         data,
         status: Statuses.Success,
         error: null,
-      }
-    },
-    collection: {
-      ...state.collection,
+      },
       list: {
-        ...state.collection.list,
+        ...state.biblioCollection.list,
         data: {
-          ...state.collection.list.data,
-          results: state.collection.list.data ? [data, ...state.collection.list.data.results] : [data],
-          total: state.collection.list.data ? state.collection.list.data.total + 1 : 1,
+          ...state.biblioCollection.list.data,
+          results: state.biblioCollection.list.data ? [data, ...state.biblioCollection.list.data.results] : [data],
+          total: state.biblioCollection.list.data ? state.biblioCollection.list.data.total + 1 : 1,
         }
       }
     }
   })),
 
-  on(AppActions.insertBiblioFailure, (state, { error }) => ({
+  on(AppActions.insertBiblioCollectionFailure, (state, { error }) => ({
     ...state,
-    biblio: {
-      ...state.biblio,
+    biblioCollection: {
+      ...state.biblioCollection,
       insert: {
-        ...state.biblio.insert,
+        ...state.biblioCollection.insert,
         status: Statuses.Failure,
         error,
       }
@@ -145,15 +158,15 @@ export const appReducer = createReducer(
 
 
   // ...
-  // Get Collections
+  // Get Biblio Collections
   // ...
-  on(AppActions.getCollections, (state, { source }) => {
+  on(AppActions.getBiblioCollections, (state, { source }) => {
     return {
       ...state,
-      collection: {
-        ...state.collection,
+      biblioCollection: {
+        ...state.biblioCollection,
         list: {
-          ...state.collection.list,
+          ...state.biblioCollection.list,
           status: source == 'load-more' ? Statuses.Success : Statuses.Loading,
           error: null,
         }
@@ -161,13 +174,13 @@ export const appReducer = createReducer(
     };
   }),
 
-  on(AppActions.getCollectionsSuccess, (state, { data, source }) => {
+  on(AppActions.getBiblioCollectionsSuccess, (state, { data, source }) => {
     let newData = data;
-    if (source === 'load-more' && state.collection.list.data) {
+    if (source === 'load-more' && state.biblioCollection.list.data) {
       newData = {
         ...data,
         results: [
-          ...state.collection.list.data.results,
+          ...state.biblioCollection.list.data.results,
           ...data.results
         ]
       };
@@ -175,10 +188,10 @@ export const appReducer = createReducer(
 
     return {
       ...state,
-      collection: {
-        ...state.collection,
+      biblioCollection: {
+        ...state.biblioCollection,
         list: {
-          ...state.collection.list,
+          ...state.biblioCollection.list,
           data: newData,
           status: Statuses.Success,
           error: null,
@@ -187,12 +200,12 @@ export const appReducer = createReducer(
     };
   }),
 
-  on(AppActions.getCollectionsFailure, (state, { error }) => ({
+  on(AppActions.getBiblioCollectionsFailure, (state, { error }) => ({
     ...state,
-    collection: {
-      ...state.collection,
+    biblioCollection: {
+      ...state.biblioCollection,
       list: {
-        ...state.collection.list,
+        ...state.biblioCollection.list,
         status: Statuses.Failure,
         error,
       }
@@ -203,22 +216,22 @@ export const appReducer = createReducer(
   // ...
   // Retrieve Collection
   // ...
-  on(AppActions.getCollection, (state) => ({
+  on(AppActions.getBiblioCollection, (state) => ({
     ...state,
-    collection: {
-      ...state.collection,
+    biblioCollection: {
+      ...state.biblioCollection,
       detail: {
-        ...state.collection.detail,
+        ...state.biblioCollection.detail,
         status: Statuses.Loading,
         error: null,
       }
     }
   })),
 
-  on(AppActions.getCollectionSuccess, (state, { data }) => ({
+  on(AppActions.getBiblioCollectionSuccess, (state, { data }) => ({
     ...state,
-    collection: {
-      ...state.collection,
+    biblioCollection: {
+      ...state.biblioCollection,
       detail: {
         data,
         status: Statuses.Success,
@@ -227,12 +240,128 @@ export const appReducer = createReducer(
     }
   })),
 
-  on(AppActions.getCollectionFailure, (state, { error }) => ({
+  on(AppActions.getBiblioCollectionFailure, (state, { error }) => ({
     ...state,
-    collection: {
-      ...state.collection,
+    biblioCollection: {
+      ...state.biblioCollection,
       detail: {
-        ...state.collection.detail,
+        ...state.biblioCollection.detail,
+        status: Statuses.Failure,
+        error,
+      }
+    }
+  })),
+
+
+  // ..
+  // Update Biblio Collection
+  // ...
+  on(AppActions.updateBiblioCollection, (state) => ({
+    ...state,
+    biblioCollection: {
+      ...state.biblioCollection,
+      update: {
+        ...state.biblioCollection.update,
+        status: Statuses.Loading,
+        error: null,
+      }
+    }
+  })),
+  on(AppActions.updateBiblioCollectionSuccess, (state, { data, id }) => {
+    const index = state.biblioCollection.list.data?.results.findIndex((item: any) => item.id === id);
+
+    return {
+      ...state,
+      biblioCollection: {
+        ...state.biblioCollection,
+        update: {
+          data,
+          status: Statuses.Success,
+          error: null,
+        },
+        detail: {
+          ...state.biblioCollection.detail,
+          data: data,
+          error: null,
+        },
+        list: {
+          ...state.biblioCollection.list,
+          data: {
+            ...state.biblioCollection.list.data,
+            results: [
+              ...(state.biblioCollection.list.data?.results.slice(0, index ?? 0) || []),
+              {
+                ...state.biblioCollection.list.data?.results[index ?? 0],
+                ...data
+              },
+              ...(state.biblioCollection.list.data?.results.slice((index ?? 0) + 1) || []),
+            ]
+          }
+        }
+      }
+    };
+  }),
+  on(AppActions.updateBiblioCollectionFailure, (state, { error }) => ({
+    ...state,
+    biblioCollection: {
+      ...state.biblioCollection,
+      update: {
+        ...state.biblioCollection.update,
+        status: Statuses.Failure,
+        error,
+      }
+    }
+  })),
+
+
+  // ...
+  // Delete Biblio Collection
+  // ...
+  on(AppActions.deleteBiblioCollection, (state) => ({
+    ...state,
+    biblioCollection: {
+      ...state.biblioCollection,
+      delete: {
+        ...state.biblioCollection.delete,
+        status: Statuses.Loading,
+        error: null,
+      }
+    }
+  })),
+  on(AppActions.deleteBiblioCollectionSuccess, (state, { id }) => {
+    const newResults = state.biblioCollection.list.data?.results.filter((item: any) => item.id !== id);
+
+    return {
+      ...state,
+      biblioCollection: {
+        ...state.biblioCollection,
+        delete: {
+          data: null,
+          status: Statuses.Success,
+          error: null,
+        },
+        detail: {
+          ...state.biblioCollection.detail,
+          data: null,
+          error: null,
+        },  
+        list: {
+          ...state.biblioCollection.list,
+          data: {
+            ...state.biblioCollection.list.data,
+            results: newResults,
+            total: state.biblioCollection.list.data ? state.biblioCollection.list.data.total - 1 : 0,
+          }
+        }
+      }
+    };
+  }),
+  on(AppActions.deleteBiblioCollectionFailure, (state, { error }) => ({
+    ...state,
+    biblioCollection: {
+      ...state.biblioCollection,
+      delete: {
+        ...state.biblioCollection.delete,
         status: Statuses.Failure,
         error,
       }

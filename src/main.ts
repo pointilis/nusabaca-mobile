@@ -14,7 +14,9 @@ import { AppEffects } from './app/states/effects/app.effects';
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    provideIonicAngular(),
+    provideIonicAngular({
+      mode: 'md',
+    }),
     provideRouter(routes, withPreloading(PreloadAllModules)),
     provideStore(appReducer),
     provideState({

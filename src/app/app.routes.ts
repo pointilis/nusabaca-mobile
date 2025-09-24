@@ -10,8 +10,17 @@ export const routes: Routes = [
     loadChildren: () => import('./tabs/tabs.routes').then((m) => m.routes),
   },
   {
-    path: 'insert-biblio',
-    loadComponent: () => import('./features/collection-insert-biblio/collection-insert-biblio.page').then( m => m.CollectionInsertBiblioPage)
+    path: 'collection-editor',
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./features/collection-editor/collection-editor.page').then( m => m.CollectionEditorPage),
+      },
+      {
+        path: ':id',
+        loadComponent: () => import('./features/collection-editor/collection-editor.page').then( m => m.CollectionEditorPage),
+      }
+    ]
   },
   {
     path: 'collection/:id',

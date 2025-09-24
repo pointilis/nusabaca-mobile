@@ -13,17 +13,17 @@ export const selectAccount = createSelector(
 // Insert Biblio selectors
 export const selectInsertBiblio = createSelector(
     selectState,
-    (state: AppState) => state.biblio.insert
+    (state: AppState) => state.biblioCollection.insert
 );
 
-// Select collection list
+// Select biblioCollection list
 export const selectCollectionList = createSelector(
     selectState,
-    (state: AppState) => state.collection.list
+    (state: AppState) => state.biblioCollection.list
 );
 
-// Select collection detail
+// Select biblioCollection detail
 export const selectCollectionDetail = createSelector(
     selectState,
-    (state: AppState) => state.collection.detail
+    (state: AppState) => state.biblioCollection.detail
 );

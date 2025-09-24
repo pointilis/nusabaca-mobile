@@ -43,7 +43,7 @@ export class CollectionListComponent  implements OnInit {
 
     this.actions$.pipe(takeUntilDestroyed()).subscribe((action: any) => {
       switch (action.type) {
-        case AppActions.getCollectionsSuccess.type:
+        case AppActions.getBiblioCollectionsSuccess.type:
           if (action.source === 'load-more' && this.infiniteEvent) {
             this.infiniteEvent.target.complete();
           }
@@ -59,11 +59,11 @@ export class CollectionListComponent  implements OnInit {
   ngOnInit() {}
 
   ngAfterViewInit() {
-    this.getCollections();
+    this.getBiblioCollections();
   }
 
-  getCollections(source: string = '') {
-    this.store.dispatch(AppActions.getCollections({ params: this.params, source: source }));
+  getBiblioCollections(source: string = '') {
+    this.store.dispatch(AppActions.getBiblioCollections({ params: this.params, source: source }));
   }
 
   onIonInfinite(event: InfiniteScrollCustomEvent) {
@@ -74,7 +74,7 @@ export class CollectionListComponent  implements OnInit {
       offset: this.params.offset + this.params.limit,
     };
 
-    this.getCollections('load-more');
+    this.getBiblioCollections('load-more');
   }
 
 }

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { BiblioEditorComponent } from './biblio-editor.component';
+import { BiblioEditorComponent } from './collection-editor.component';
 
 describe('BiblioEditorComponent', () => {
   let component: BiblioEditorComponent;
