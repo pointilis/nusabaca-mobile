@@ -1,0 +1,33 @@
+@if (collections$ | async; as collections) {
+  @if (collections.status == 'success') {
+    @if (collections.data.count > 0) {
+      <ion-list color="light">
+        @for (collection of collections.data.results; track collection.id) {
+          <app-collection-item [collection]="collection"></app-collection-item>
+        }
+      </ion-list>
+    } @else {
+      <div class="flex h-full flex-col items-center justify-center">
+        <div class="ion-padding text-center">
+          <p class="mt-2 text-center text-gray-700 text-lg block">Your books currently being empty.</p>
+          <ion-button color="dark" class="mt-4" shape="round" [routerLink]="'/insert-biblio'">
+            Add Your First Book
+          </ion-button>
+        </div>
+      </div>
+    }
+  } @else if (collections.status == 'loading') {
+    <div class="flex h-full flex-col items-center justify-center">
+      <ion-spinner name="crescent" color="dark"></ion-spinner>
+      <p class="mt-2 text-center text-gray-700 text-lg block">Loading your collections...</p>
+    </div>
+  } @else if (collections.status == 'error') {
+    <div class="flex h-full flex-col items-center justify-center">
+      <p class="mt-2 text-center text-red-700 text-lg block">Failed to load collections. Please try again.</p>
+    </div>
+  }
+}
+
+<ion-infinite-scroll #collectionInfinite (ionInfinite)="onIonInfinite($event)" [disabled]="disableInfinite">
+  <ion-infinite-scroll-content></ion-infinite-scroll-content>
+</ion-infinite-scroll>

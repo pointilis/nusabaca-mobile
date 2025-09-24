@@ -1,0 +1,24 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="dark">
+    <ion-title class="ion-padding-start headline !font-bold">
+      Nusabaca
+    </ion-title>
+
+    <ion-buttons slot="end" class="ion-margin-end">
+      <ion-button shape="round" mode="ios" [routerLink]="['/insert-biblio']" color="light">
+        <ion-icon name="add-circle" slot="start" class="text-2xl mr-1"></ion-icon>
+        <ion-text>Add Book</ion-text>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" color="light">
+  <ion-header collapse="condense">
+    <ion-toolbar color="light">
+      <ion-title size="large" class="headline !font-bold">Nusabaca</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <app-collection-list></app-collection-list>
+</ion-content>

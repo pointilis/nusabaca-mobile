@@ -35,3 +35,18 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+
+/* Tailwind CSS */
+@import "tailwindcss";
+
+h1 {
+    font-family: var(--headline-font-family);
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+.headline {
+    font-family: var(--headline-font-family);
+    font-optical-sizing: auto;
+    font-style: normal;
+}

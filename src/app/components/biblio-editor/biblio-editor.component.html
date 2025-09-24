@@ -1,0 +1,68 @@
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+  <ion-input 
+    formControlName="title" 
+    type="text" 
+    fill="outline"
+    label="Title"
+    placeholder="Enter book title"
+    label-placement="stacked"
+    class="mb-6"
+    required
+  >
+    <ion-icon slot="start" name="document" aria-hidden="true" class="text-xl text-neutral-600"></ion-icon>
+  </ion-input>
+
+  <ion-input 
+    formControlName="total_pages" 
+    type="number" 
+    fill="outline"
+    label="Total Pages"
+    placeholder="Enter total pages"
+    label-placement="stacked"
+    class="mb-6"
+    required
+  >
+    <ion-icon slot="start" name="albums" aria-hidden="true" class="text-xl text-neutral-600"></ion-icon>
+  </ion-input>
+
+  <ion-input 
+    formControlName="publication_year" 
+    type="number" 
+    fill="outline"
+    label="Publication Year"
+    placeholder="Enter publication year"
+    label-placement="stacked"
+    class="mb-6"
+    required
+  >
+    <ion-icon slot="start" name="calendar-clear" aria-hidden="true" class="text-xl text-neutral-600"></ion-icon>
+  </ion-input>
+  
+  <ion-input 
+    formControlName="author" 
+    type="text" 
+    fill="outline"
+    label="Author"
+    placeholder="Enter author name"
+    label-placement="stacked"
+    class="mb-6"
+    helperText="Separate with '|' for multiple authors"
+  >
+    <ion-icon slot="start" name="person" aria-hidden="true" class="text-xl text-neutral-600"></ion-icon>
+  </ion-input>
+
+  <ion-input 
+    formControlName="publisher" 
+    type="text" 
+    fill="outline"
+    label="Publisher"
+    placeholder="Enter publisher name"
+    class="mb-6"
+    label-placement="stacked"
+    helperText="Separate with '|' for multiple publishers"
+  >
+    <ion-icon slot="start" name="business" aria-hidden="true" class="text-xl text-neutral-600"></ion-icon>
+  </ion-input>
+
+  <ion-button expand="full" type="submit" color="dark" [disabled]="formGroup.invalid" shape="round" size="large">Save</ion-button>
+</form>

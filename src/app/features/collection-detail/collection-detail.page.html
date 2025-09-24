@@ -1,0 +1,31 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/home"></ion-back-button> 
+    </ion-buttons>
+    <ion-title>Book Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" color="light">
+  <ion-header collapse="condense">
+    <ion-toolbar color="light">
+      <ion-title size="large">Book Details</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  @if (collection$ | async; as collection) {
+    @if (collection.status == 'success') {
+      <div class="ion-padding">
+        <h2 class="text-2xl font-bold mb-2">{{ collection.data.title }}</h2>
+        <p class="text-gray-700 mb-4">Total pages: {{ collection.data.total_pages | number }}</p>
+        <p class="text-gray-700 mb-4">Published: {{ collection.data.publication_year ? collection.data.publication_year : '-' }}</p>
+        <!-- Add more fields as necessary -->
+      </div>
+    } @else if (collection.status == 'loading') {
+      <div class="ion-padding">
+        <p class="text-gray-700 text-lg block">Loading book details...</p>
+      </div>
+    }
+  }
+</ion-content>

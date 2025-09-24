@@ -16,9 +16,16 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
+    "skipLibCheck": true,
     "target": "es2022",
     "module": "es2020",
-    "lib": ["es2018", "dom"],
+    "lib": [
+      "es2018",
+      "dom",
+      "ES2020",
+      "ES2020.Promise",
+      "ES2020.Symbol.WellKnown"
+    ],
     "useDefineForClassFields": false
   },
   "angularCompilerOptions": {

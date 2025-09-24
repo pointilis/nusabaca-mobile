@@ -1,0 +1,10 @@
+<ion-item [routerLink]="['/collection', collection.id]" color="light">
+  <ion-thumbnail slot="start" class="flex items-center">
+    <img alt="Book Thumbnail" src="assets/icon/book.png" class="w-10 h-auto" />
+  </ion-thumbnail>
+
+  <ion-label>
+    <h2>{{ collection.title }}</h2>
+    <p class="!text-neutral-600">{{ collection.total_pages | number }} pages</p>
+  </ion-label>
+</ion-item>

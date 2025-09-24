@@ -1,2 +1,8 @@
 // For information on how to create your own theme, please see:
 // http://ionicframework.com/docs/theming/
+
+:root {
+  --headline-font-family: 'Alan Sans', sans-serif;
+  --ion-font-family: 'Inter', sans-serif;
+  --ion-item-background: var(--ion-color-light);
+}

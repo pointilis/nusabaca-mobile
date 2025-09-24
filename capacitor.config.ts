@@ -1,9 +1,21 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'mobile.nusabaca.com',
   appName: 'Nusabaca',
-  webDir: 'www'
+  webDir: 'www',
+  android: {
+    allowMixedContent: true,
+  },
+  plugins: {
+    EdgeToEdge: {
+      backgroundColor: "#ffffff",
+    },
+    StatusBar: {
+      overlaysWebView: true,
+      style: "DARK",
+    },
+  }
 };
 
 export default config;
