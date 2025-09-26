@@ -1,7 +1,7 @@
 import { NgStyle } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ModalController, IonItem, IonRadio, IonRadioGroup, IonInput, IonButton, IonIcon, IonSelect, IonSelectOption, IonText } from '@ionic/angular/standalone';
+import { ModalController, IonItem, IonRadio, IonRadioGroup, IonInput, IonButton, IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { albums, cloudUpload, documentText } from 'ionicons/icons';
 
@@ -12,9 +12,6 @@ import { albums, cloudUpload, documentText } from 'ionicons/icons';
   imports: [
     IonButton,
     IonIcon,
-    IonText,
-    IonSelect,
-    IonSelectOption,
     IonInput,
     IonRadio,
     IonRadioGroup,
@@ -25,6 +22,8 @@ import { albums, cloudUpload, documentText } from 'ionicons/icons';
   ],
 })
 export class UploadPageOptionsComponent  implements OnInit {
+
+  @ViewChild('pageNumberInput', { static: false }) pageNumberInput!: IonInput;
 
   pageNumber: string = '';
   voiceGender: string = 'male';
@@ -42,6 +41,13 @@ export class UploadPageOptionsComponent  implements OnInit {
       page_number: this.pageNumber,
       voice_gender: this.voiceGender,
     }, 'confirm');
+  }
+
+  ngAfterViewInit() {
+    console.log('UploadPageOptionsComponent initialized');
+    setTimeout(() => {
+      this.pageNumberInput.setFocus();
+    }, 300);
   }
 
 }

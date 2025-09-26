@@ -8,7 +8,7 @@ import { AppActions } from 'src/app/states/actions/app.actions';
 import { selectCollectionDetail } from 'src/app/states/selectors/app.selectors';
 import { camera, ellipsisVertical, pencil, trash } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
-import { IonText, ActionSheetController, AlertController, IonIcon, IonButton, IonHeader, IonToolbar, IonTitle, IonContent, IonBackButton, IonButtons } from '@ionic/angular/standalone';
+import { ActionSheetController, AlertController, IonIcon, IonButton, IonHeader, IonToolbar, IonTitle, IonContent, IonBackButton, IonButtons } from '@ionic/angular/standalone';
 import { languages } from 'src/app/utils/constants';
 import { PageFileListComponent } from 'src/app/components/page-file-list/page-file-list.component';
 
@@ -27,7 +27,6 @@ import { PageFileListComponent } from 'src/app/components/page-file-list/page-fi
     IonToolbar,
     IonTitle,
     IonContent,
-    IonText,
     IonBackButton,
     IonButtons,
     IonIcon,

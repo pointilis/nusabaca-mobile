@@ -23,7 +23,6 @@ import { UploadPageOptionsComponent } from '../upload-page-options/upload-page-o
     IonIcon,
     IonText,
     TakePhotoComponent,
-    UploadPageOptionsComponent,
   ],
   providers: [
     FileTransfer,
