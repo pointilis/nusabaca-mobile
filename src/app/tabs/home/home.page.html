@@ -4,12 +4,24 @@
       Nusabaca
     </ion-title>
 
-    <ion-buttons slot="end" class="ion-margin-end">
-      <ion-button shape="round" mode="ios" [routerLink]="['/collection-editor']" color="light">
-        <ion-icon name="add-circle" slot="start" class="text-2xl mr-1"></ion-icon>
-        <ion-text>Add Book</ion-text>
-      </ion-button>
-    </ion-buttons>
+    <ion-button 
+      slot="end" 
+      size="small" 
+      shape="round" 
+      mode="ios" 
+      [routerLink]="['/collection-editor']" 
+      color="success" 
+      class="ion-margin-end"
+      [ngStyle]="{
+        '--padding-top': '4px',
+        '--padding-bottom': '4px',
+        '--padding-start': '8px',
+        '--padding-end': '8px',
+      }"
+    >
+      <ion-icon name="add-circle" slot="start" class="text-2xl mr-1"></ion-icon>
+      <ion-text>Add Book</ion-text>
+    </ion-button>
   </ion-toolbar>
 </ion-header>
 

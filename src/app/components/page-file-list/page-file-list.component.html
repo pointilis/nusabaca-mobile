@@ -1,0 +1,10 @@
+<ion-button shape="round" mode="ios" color="success" (click)="onAddPage()">
+  <ion-icon name="camera" slot="start" class="mr-2"></ion-icon>
+  Tambah Halaman
+</ion-button>
+
+<app-take-photo #takePhotoComponent (photoTaken)="onPhotoTaken($event)"></app-take-photo>
+
+<div class="block mt-2 text-gray-600">
+  <ion-text class="text-sm">Pindai halaman menjadi suara</ion-text>
+</div>

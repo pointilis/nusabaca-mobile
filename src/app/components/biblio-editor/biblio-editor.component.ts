@@ -1,11 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { addIcons } from 'ionicons';
-import { albums, business, calendarClear, document, person } from 'ionicons/icons';
+import { albums, business, calendarClear, document, language, person } from 'ionicons/icons';
 import { AppActions } from 'src/app/states/actions/app.actions';
 import { AppState } from 'src/app/states/reducers/app.reducer';
+import { IonInput, IonIcon, IonButton, IonSelect, IonSelectOption } from '@ionic/angular/standalone';
+import { languages } from 'src/app/utils/constants';
 
 @Component({
   selector: 'app-biblio-editor',
@@ -14,7 +15,11 @@ import { AppState } from 'src/app/states/reducers/app.reducer';
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    IonicModule,
+    IonInput,
+    IonIcon,
+    IonButton,
+    IonSelect,
+    IonSelectOption,
   ]
 })
 export class BiblioEditorComponent  implements OnInit {
@@ -22,7 +27,8 @@ export class BiblioEditorComponent  implements OnInit {
   @Input() collection: any = null;
   
   formGroup: FormGroup = new FormGroup({});
-
+  languages = languages;
+  
   constructor(
     private store: Store<AppState>,
   ) { 
@@ -32,6 +38,7 @@ export class BiblioEditorComponent  implements OnInit {
   ngOnInit() {
     this.formGroup = new FormGroup({
       title: new FormControl('', [Validators.required]),
+      language: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(2)]),
       author: new FormControl(''),
       publisher: new FormControl(''),
       publication_year: new FormControl('', [Validators.required]),
@@ -62,6 +69,7 @@ export class BiblioEditorComponent  implements OnInit {
         publisher: publishers,
         publication_year: this.collection.publication_year,
         total_pages: this.collection.total_pages,
+        language: this.collection.language,
       });
     }
   }

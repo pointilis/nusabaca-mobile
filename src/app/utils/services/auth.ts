@@ -20,6 +20,16 @@ export class AuthService {
   }
 
   /**
+   * Get signup data from local storage
+   * 
+   * @returns The signup data if available, otherwise null
+   */
+  async getSignUpData(): Promise<any | null> {
+    const { value } = await Preferences.get({ key: StorageKeys.SignUpData });
+    return value ? JSON.parse(value) : null;
+  }
+
+  /**
    * Get token from signup data in local storage
    * 
    * @returns The token if available, otherwise null
@@ -31,6 +41,22 @@ export class AuthService {
       return valueJson?.meta?.session_token || null;
     }
     return null;
+  }
+
+  /**
+   * Check if the user is authenticated by verifying the presence of a token
+   * @returns True if authenticated, otherwise false
+   */
+  async isAuthenticated(): Promise<boolean> {
+    const token = await this.getToken();
+    return !!token;
+  }
+
+  /**
+   * Clear all authentication data from local storage
+   */
+  async clearAuthData() {
+    await Preferences.remove({ key: StorageKeys.SignUpData });
   }
 
 }

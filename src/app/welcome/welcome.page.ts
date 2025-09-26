@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonButton, IonIcon, IonText } from '@ionic/angular/standalone';
+import { IonImg, IonContent, IonButton, IonIcon, IonText } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { logoGoogle } from 'ionicons/icons';
 import { GoogleLoginResponseOffline, GoogleLoginResponseOnline, SocialLogin } from '@capgo/capacitor-social-login';
@@ -20,6 +20,7 @@ import { ISignUp } from '../utils/interfaces';
     IonButton,
     IonIcon,
     IonText,
+    IonImg,
     CommonModule, 
     FormsModule
   ]

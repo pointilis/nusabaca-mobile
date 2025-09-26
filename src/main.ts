@@ -10,10 +10,18 @@ import { appReducer } from './app/states/reducers/app.reducer';
 import { httpInterceptor } from './app/utils/interceptor/http-interceptor';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { AppEffects } from './app/states/effects/app.effects';
+import { importProvidersFrom } from '@angular/core';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FileTransfer } from '@awesome-cordova-plugins/file-transfer/ngx';
 
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    importProvidersFrom(
+      BrowserAnimationsModule,
+      NgxSpinnerModule.forRoot()
+    ),
     provideIonicAngular({
       mode: 'md',
     }),
@@ -29,5 +37,6 @@ bootstrapApplication(AppComponent, {
         httpInterceptor,
       ])
     ),
+    FileTransfer,
   ],
 });

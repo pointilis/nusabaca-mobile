@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButton, IonButtons } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons } from '@ionic/angular/standalone';
 import { BiblioEditorComponent } from 'src/app/components/biblio-editor/biblio-editor.component';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -20,7 +20,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     IonHeader, 
     IonTitle, 
     IonToolbar, 
-    IonButton,
     IonButtons,
     IonBackButton,
     CommonModule, 

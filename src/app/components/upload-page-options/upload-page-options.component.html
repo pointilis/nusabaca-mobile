@@ -1,0 +1,42 @@
+<div class="p-8">
+  <ion-input 
+    [(ngModel)]="pageNumber" 
+    type="number" 
+    placeholder="Nomor halaman"
+    label="Nomor Halaman *"
+    label-placement="stacked"
+    fill="outline"
+    type="number"
+  >
+    <ion-icon slot="start" name="document-text" class="text-xl" aria-hidden="true"></ion-icon>
+  </ion-input>
+
+  <div class="mt-4 mb-2 text-gray-600">
+    Jenis suara
+  </div>
+
+  <ion-radio-group [(ngModel)]="voiceGender">
+    <ion-item lines="none" class="ion-no-padding" [ngStyle]="{'--background': 'transparent', '--ripple-color': 'transparent'}">
+      <ion-radio value="male" labelPlacement="end" justify="start">Laki-laki</ion-radio>
+    </ion-item>
+
+    <ion-item lines="none" class="ion-no-padding" [ngStyle]="{'--background': 'transparent', '--ripple-color': 'transparent'}">
+      <ion-radio value="female" labelPlacement="end" justify="start">Perempuan</ion-radio>
+    </ion-item>
+  </ion-radio-group>
+  
+  <ion-button 
+    expand="block" 
+    color="dark" 
+    shape="round" 
+    class="mt-6" 
+    (click)="submitOptions()" 
+    [ngStyle]="{
+    '--padding-top': '16px',
+    '--padding-bottom': '16px',
+  }"
+  [disabled]="!pageNumber">
+    <ion-icon name="cloud-upload" slot="start" class="mr-2"></ion-icon>
+    Upload
+  </ion-button>
+</div>

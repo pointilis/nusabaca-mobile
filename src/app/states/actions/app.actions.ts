@@ -1,5 +1,5 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import { IInsertBibilo, IPagination, ISignUp } from 'src/app/utils/interfaces';
+import { IInsertBibilo, IPageFile, IPagination, ISignUp } from 'src/app/utils/interfaces';
 
 export const AppActions = createActionGroup({
   source: 'app',
@@ -7,6 +7,14 @@ export const AppActions = createActionGroup({
     'Sign Up': props<{ data: ISignUp }>(),
     'Sign Up Success': props<{ data: any }>(),
     'Sign Up Failure': props<{ error: any }>(),
+
+    'Sign Out': emptyProps(),
+    'Sign Out Success': emptyProps(),
+    'Sign Out Failure': props<{ error: any }>(),
+
+    'Get Account': emptyProps(),
+    'Get Account Success': props<{ data: any }>(),
+    'Get Account Failure': props<{ error: any }>(),
 
     'Insert Biblio Collection': props<{ data: IInsertBibilo }>(),
     'Insert Biblio Collection Success': props<{ data: any }>(),
@@ -27,5 +35,9 @@ export const AppActions = createActionGroup({
     'Delete Biblio Collection': props<{ id: string, source?: string }>(),
     'Delete Biblio Collection Success': props<{ id: string, source?: string }>(),
     'Delete Biblio Collection Failure': props<{ error: any, id: string, source?: string }>(),
+
+    'Insert Page': props<{ data: IPageFile }>(),
+    'Insert Page Success': props<{ data: any }>(),
+    'Insert Page Failure': props<{ error: any }>(),
   }
 });

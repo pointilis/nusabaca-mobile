@@ -27,3 +27,15 @@ export const selectCollectionDetail = createSelector(
     selectState,
     (state: AppState) => state.biblioCollection.detail
 );
+
+// Insert Page selectors
+export const selectInsertPage = createSelector(
+    selectState,
+    (state: AppState) => state.pageFile.insert
+);
+
+// Select pageFile list
+export const selectPageFileList = createSelector(
+    selectState,
+    (state: AppState) => state.pageFile.list
+);

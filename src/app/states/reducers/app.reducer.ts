@@ -37,6 +37,24 @@ export interface AppState {
       status: string;
       error: any;
     }
+  },
+  pageFile: {
+    insert: {
+      data: any;
+      status: string;
+      error: any;
+    },
+    list: {
+      data: any;
+      status: string;
+      error: any;
+      source?: string;
+    },
+    detail: {
+      data: any;
+      status: string;
+      error: any;
+    }
   }
 }
 
@@ -58,6 +76,24 @@ export const initialState: AppState = {
       error: null,
     },
     delete: {
+      data: null,
+      status: Statuses.Idle,
+      error: null,
+    },
+    list: {
+      data: null,
+      status: Statuses.Idle,
+      error: null,
+      source: undefined,
+    },
+    detail: {
+      data: null,
+      status: Statuses.Idle,
+      error: null,
+    }
+  },
+  pageFile: {
+    insert: {
       data: null,
       status: Statuses.Idle,
       error: null,
@@ -137,8 +173,11 @@ export const appReducer = createReducer(
         ...state.biblioCollection.list,
         data: {
           ...state.biblioCollection.list.data,
-          results: state.biblioCollection.list.data ? [data, ...state.biblioCollection.list.data.results] : [data],
-          total: state.biblioCollection.list.data ? state.biblioCollection.list.data.total + 1 : 1,
+          results: [
+            data, 
+            ...state.biblioCollection.list.data.results
+          ],
+          count: state.biblioCollection.list.data ? state.biblioCollection.list.data.count + 1 : 1,
         }
       }
     }
@@ -350,7 +389,7 @@ export const appReducer = createReducer(
           data: {
             ...state.biblioCollection.list.data,
             results: newResults,
-            total: state.biblioCollection.list.data ? state.biblioCollection.list.data.total - 1 : 0,
+            count: state.biblioCollection.list.data ? state.biblioCollection.list.data.count - 1 : 0,
           }
         }
       }
@@ -362,6 +401,98 @@ export const appReducer = createReducer(
       ...state.biblioCollection,
       delete: {
         ...state.biblioCollection.delete,
+        status: Statuses.Failure,
+        error,
+      }
+    }
+  })),
+
+
+  // ...
+  // Sign Out
+  // ...
+  on(AppActions.signOut, (state) => ({
+    ...state,
+    account: {
+      ...state.account,
+      status: Statuses.Loading,
+      error: null,
+    }
+  })),
+  on(AppActions.signOutSuccess, (state) => ({
+    ...initialState
+  })),
+  on(AppActions.signOutFailure, (state, { error }) => ({
+    ...state,
+    account: {
+      ...state.account,
+      status: Statuses.Failure,
+      error,
+    }
+  })),
+
+
+  // ...
+  // Get Account
+  // ...
+  on(AppActions.getAccount, (state) => ({
+    ...state,
+    account: {
+      ...state.account,
+      status: Statuses.Loading,
+      error: null,
+    }
+  })),
+  on(AppActions.getAccountSuccess, (state, { data }) => ({
+    ...state,
+    account: {
+      ...state.account,
+      data,
+      status: Statuses.Success,
+      error: null,
+    }
+  })),
+  on(AppActions.getAccountFailure, (state, { error }) => ({
+    ...state,
+    account: {
+      ...state.account,
+      status: Statuses.Failure,
+      error,
+    }
+  })),
+
+
+  // ...
+  // Insert Page File
+  // ...
+  on(AppActions.insertPage, (state) => ({
+    ...state,
+    pageFile: {
+      ...state.pageFile,
+      insert: {
+        ...state.pageFile.insert,
+        status: Statuses.Loading,
+        error: null,
+      }
+    }
+  })),
+  on(AppActions.insertPageSuccess, (state, { data }) => ({
+    ...state,
+    pageFile: {
+      ...state.pageFile,
+      insert: {
+        data,
+        status: Statuses.Success,
+        error: null,
+      }
+    }
+  })),
+  on(AppActions.insertPageFailure, (state, { error }) => ({
+    ...state,
+    pageFile: {
+      ...state.pageFile,
+      insert: {
+        ...state.pageFile.insert,
         status: Statuses.Failure,
         error,
       }

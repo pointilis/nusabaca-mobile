@@ -8,6 +8,9 @@ const config: CapacitorConfig = {
     allowMixedContent: true,
   },
   plugins: {
+    CapacitorHttp: {
+      enabled: true,
+    },
     EdgeToEdge: {
       backgroundColor: "#ffffff",
     },

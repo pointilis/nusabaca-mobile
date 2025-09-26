@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
 import { select, Store } from '@ngrx/store';
 import { Observable, takeUntil } from 'rxjs';
 import { AppActions } from 'src/app/states/actions/app.actions';
@@ -9,20 +8,24 @@ import { AppState } from 'src/app/states/reducers/app.reducer';
 import { selectCollectionList } from 'src/app/states/selectors/app.selectors';
 import { IPagination } from 'src/app/utils/interfaces';
 import { CollectionItemComponent } from '../collection-item/collection-item.component';
-import { InfiniteScrollCustomEvent } from '@ionic/angular';
 import { Actions } from '@ngrx/effects';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { IonInfiniteScroll } from '@ionic/angular';
+import { InfiniteScrollCustomEvent, IonButton, IonInfiniteScroll, IonInfiniteScrollContent, IonList, IonSpinner } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-collection-list',
   templateUrl: './collection-list.component.html',
   styleUrls: ['./collection-list.component.scss'],
   imports: [
-    IonicModule,
     CommonModule,
     RouterModule,
     CollectionItemComponent,
+    IonButton,
+    IonSpinner,
+    IonList,
+    IonInfiniteScroll,
+    IonInfiniteScrollContent,
+
   ]
 })
 export class CollectionListComponent  implements OnInit {

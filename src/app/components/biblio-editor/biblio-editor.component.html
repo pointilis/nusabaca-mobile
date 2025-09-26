@@ -3,7 +3,7 @@
     formControlName="title" 
     type="text" 
     fill="outline"
-    label="Title"
+    label="Title *"
     placeholder="Enter book title"
     label-placement="stacked"
     class="mb-6"
@@ -12,12 +12,27 @@
     <ion-icon slot="start" name="document" aria-hidden="true" class="text-xl text-neutral-600"></ion-icon>
   </ion-input>
 
+  <ion-select
+    formControlName="language"
+    interface="popover"
+    placeholder="Select Language"
+    label="Main Book Language *"
+    label-placement="stacked"
+    fill="outline"
+    class="mb-6"
+    required
+  >
+    @for (lang of languages; track lang.code) {
+      <ion-select-option [value]="lang.code">{{ lang.name }}</ion-select-option>
+    }
+  </ion-select>
+
   <div class="grid grid-cols-2 gap-4 mb-6">
     <ion-input 
       formControlName="total_pages" 
       type="number" 
       fill="outline"
-      label="Total Pages"
+      label="Total Pages *"
       placeholder="Enter here"
       label-placement="stacked"
       required
@@ -29,7 +44,7 @@
       formControlName="publication_year" 
       type="number" 
       fill="outline"
-      label="Publication Year"
+      label="Publication Year *"
       placeholder="Enter here"
       label-placement="stacked"
       required
@@ -38,31 +53,33 @@
     </ion-input>
   </div>
   
-  <ion-input 
-    formControlName="author" 
-    type="text" 
-    fill="outline"
-    label="Author"
-    placeholder="Enter author name"
-    label-placement="stacked"
-    class="mb-6"
-    helperText="Separate with '|' for multiple authors"
-  >
-    <ion-icon slot="start" name="person" aria-hidden="true" class="text-xl text-neutral-600"></ion-icon>
-  </ion-input>
+  @if (this.collection) {
+    <ion-input 
+      formControlName="author" 
+      type="text" 
+      fill="outline"
+      label="Author"
+      placeholder="Enter author name"
+      label-placement="stacked"
+      class="mb-6"
+      helperText="Separate with '|' for multiple authors"
+    >
+      <ion-icon slot="start" name="person" aria-hidden="true" class="text-xl text-neutral-600"></ion-icon>
+    </ion-input>
 
-  <ion-input 
-    formControlName="publisher" 
-    type="text" 
-    fill="outline"
-    label="Publisher"
-    placeholder="Enter publisher name"
-    class="mb-6"
-    label-placement="stacked"
-    helperText="Separate with '|' for multiple publishers"
-  >
-    <ion-icon slot="start" name="business" aria-hidden="true" class="text-xl text-neutral-600"></ion-icon>
-  </ion-input>
+    <ion-input 
+      formControlName="publisher" 
+      type="text" 
+      fill="outline"
+      label="Publisher"
+      placeholder="Enter publisher name"
+      class="mb-6"
+      label-placement="stacked"
+      helperText="Separate with '|' for multiple publishers"
+    >
+      <ion-icon slot="start" name="business" aria-hidden="true" class="text-xl text-neutral-600"></ion-icon>
+    </ion-input>
+  }
 
   <ion-button expand="full" type="submit" color="dark" [disabled]="formGroup.invalid" shape="round" size="large">Save</ion-button>
 </form>

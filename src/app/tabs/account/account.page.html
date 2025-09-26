@@ -3,6 +3,25 @@
     <ion-title class="ion-padding-start headline !font-bold">
       Account
     </ion-title>
+
+    <ion-button 
+      slot="end" 
+      size="small" 
+      shape="round" 
+      mode="ios"
+      color="danger" 
+      class="ion-margin-end"
+      [ngStyle]="{
+        '--padding-top': '6px',
+        '--padding-bottom': '6px',
+        '--padding-start': '10px',
+        '--padding-end': '10px',
+      }"
+      (click)="onSignOut()"
+    >
+      <ion-icon name="log-out" slot="start" class="text-xl mr-2"></ion-icon>
+      <ion-text>Sign Out</ion-text>
+    </ion-button>
   </ion-toolbar>
 </ion-header>
 
@@ -12,4 +31,26 @@
       <ion-title size="large">Account</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  @if (account$ | async; as account) {
+    @if (account.status == 'success' && account.data) {
+      <div class="ion-padding flex h-full flex-col items-center justify-center">
+        <h2 class="!text-2xl !font-bold !block">Hello, {{ account.data?.data?.user?.display }}!</h2>
+        <p class="text-gray-700">{{ account.data?.data?.user?.email }}</p>
+      </div>
+    } @else if (account.status == 'loading') {
+      <div class="flex h-full flex-col items-center justify-center">
+        <ion-spinner name="crescent" color="dark"></ion-spinner>
+        <p class="mt-2 text-center text-gray-700 text-lg block">Loading your account details...</p>
+      </div>
+    } @else if (account.status == 'error') {
+      <div class="flex h-full flex-col items-center justify-center">
+        <p class="mt-2 text-center text-red-700 text-lg block">Failed to load account details. Please try again.</p>
+      </div>
+    }
+  } @else {
+    <div class="flex h-full flex-col items-center justify-center">
+      <p class="mt-2 text-center text-gray-700 text-lg block">No account information available.</p>
+    </div>
+  }
 </ion-content>
