@@ -1,3 +1,27 @@
-<p>
-  page-file-item works!
-</p>
+<ion-item class="mt-3">
+  <ion-icon slot="start" name="document-text-outline" class="mr-2"></ion-icon>
+  <ion-label>{{ page.page_number }}</ion-label>
+
+  @if (page.recently_added || page.recently_reuploaded || downloadInProgress) {
+    <ion-spinner slot="end" name="circles" color="primary"></ion-spinner>
+  } @else {
+    @if (!page.audiofile) {
+      <ion-buttons slot="end">
+        <ion-button mode="ios" (click)="reUploadPage(page)">
+          <ion-icon slot="start" name="cloud-upload"></ion-icon>
+          <ion-text>Upload page</ion-text>
+        </ion-button>
+      </ion-buttons>
+    } @else {
+      <ion-buttons slot="end">
+        <ion-button color="medium" (click)="editPage(page)">
+          <ion-icon slot="icon-only" name="settings-outline"></ion-icon>
+        </ion-button>
+
+        <ion-button (click)="playAudio(page)">
+          <ion-icon slot="icon-only" name="play" color="success"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    }
+  }
+</ion-item>

@@ -2,6 +2,10 @@ import { createReducer, on } from '@ngrx/store';
 import { AppActions } from '../actions/app.actions';
 import { Statuses } from 'src/app/utils/constants';
 
+const getFilename = (path: string) => {
+  return path?.split('/')?.pop()!.split('\\').pop() || '';
+}
+
 export const appFeatureKey = 'app';
 
 export interface AppState {
@@ -45,6 +49,17 @@ export interface AppState {
       error: any;
     },
     list: {
+      data: any;
+      status: string;
+      error: any;
+      source?: string;
+    },
+    delete: {
+      data: any;
+      status: string;
+      error: any;
+    },
+    update: {
       data: any;
       status: string;
       error: any;
@@ -99,6 +114,17 @@ export const initialState: AppState = {
       error: null,
     },
     list: {
+      data: null,
+      status: Statuses.Idle,
+      error: null,
+      source: undefined,
+    },
+    delete: {
+      data: null,
+      status: Statuses.Idle,
+      error: null,
+    },
+    update: {
       data: null,
       status: Statuses.Idle,
       error: null,
@@ -476,17 +502,51 @@ export const appReducer = createReducer(
       }
     }
   })),
-  on(AppActions.insertPageSuccess, (state, { data }) => ({
-    ...state,
-    pageFile: {
-      ...state.pageFile,
-      insert: {
-        data,
-        status: Statuses.Success,
-        error: null,
-      }
+  on(AppActions.insertPageSuccess, (state, { data }) => {
+    const index = state.pageFile.list.data?.results.findIndex((item: any) => item.id === data.id);
+    let results = state.pageFile.list.data?.results || [];
+
+    if (index !== -1) {
+      // if exists, update the item
+      results = [
+        ...state.pageFile.list.data!.results.slice(0, index),
+        {
+          ...state.pageFile.list.data!.results[index],
+          ...data,
+          recently_added: true,
+        },
+        ...state.pageFile.list.data!.results.slice(index + 1)
+      ];
+    } else {
+      results = [
+        {
+          ...data,
+          recently_added: true,
+        },
+        ...results
+      ];
     }
-  })),
+
+    return {
+      ...state,
+      pageFile: {
+        ...state.pageFile,
+        insert: {
+          data,
+          status: Statuses.Success,
+          error: null,
+        },
+        list: {
+          ...state.pageFile.list,
+          data: {
+            ...state.pageFile.list.data,
+            results: results,
+            count: state.pageFile.list.data ? state.pageFile.list.data.count + 1 : 1,
+          }
+        }
+      }
+    };
+  }),
   on(AppActions.insertPageFailure, (state, { error }) => ({
     ...state,
     pageFile: {
@@ -495,6 +555,274 @@ export const appReducer = createReducer(
         ...state.pageFile.insert,
         status: Statuses.Failure,
         error,
+      }
+    }
+  })),
+
+
+  // ...
+  // Get Page Files
+  // ...
+  on(AppActions.getPages, (state, { source }) => ({
+    ...state,
+    pageFile: {
+      ...state.pageFile,
+      list: {
+        ...state.pageFile.list,
+        status: source == 'load-more' ? Statuses.Success : Statuses.Loading,
+        error: null,
+      }
+    }
+  })),
+  on(AppActions.getPagesSuccess, (state, { data, source }) => {
+    let newData = data;
+    if (source === 'load-more' && state.pageFile.list.data) {
+      newData = {
+        ...data,
+        results: [
+          ...state.pageFile.list.data.results,
+          ...data.results
+        ]
+      };
+    }
+    return {
+      ...state,
+      pageFile: {
+        ...state.pageFile,
+        list: {
+          ...state.pageFile.list,
+          data: newData,
+          status: Statuses.Success,
+          error: null,
+        }
+      }
+    };
+  }),
+  on(AppActions.getPagesFailure, (state, { error }) => ({
+    ...state,
+    pageFile: {
+      ...state.pageFile,
+      list: {
+        ...state.pageFile.list,
+        status: Statuses.Failure,
+        error,
+      }
+    }
+  })),
+
+
+  // ...
+  // Retrieve Page File
+  // ...
+  on(AppActions.getPage, (state) => ({
+    ...state,
+    pageFile: {
+      ...state.pageFile,
+      detail: {
+        ...state.pageFile.detail,
+        status: Statuses.Loading,
+        error: null,
+      }
+    }
+  })),
+  on(AppActions.getPageSuccess, (state, { data, source }) => {
+    const index = state.pageFile.list.data?.results.findIndex((item: any) => item.id === data.id);
+    const currentPage = state.pageFile.list.data?.results[index ?? 0];
+    const oldFile = getFilename(currentPage?.audiofile?.audio_file?.split('?')[0]);
+    const newFile = data.audiofile?.audio_file ? getFilename(data.audiofile?.audio_file?.split('?')[0]) : '';
+    let metadataUpdate = {};
+    
+    if (source === 'recently-reuploaded') {
+      metadataUpdate = { 
+        ...metadataUpdate,
+        recently_reuploaded: true,
+      };
+
+      if (currentPage?.audiofile) {
+        if (oldFile !== newFile) {
+          metadataUpdate = { 
+            ...metadataUpdate,
+            recently_reuploaded: false,
+          };
+        }
+      }
+    }
+
+    if (source === 'recently-added') {
+      metadataUpdate = { 
+        ...metadataUpdate,
+        recently_added: true,
+        created: currentPage?.created || false,
+        updated: currentPage?.updated || false,
+      };
+
+      if (data.audiofile) {
+        if (currentPage?.created == true) {
+          metadataUpdate = { 
+            ...metadataUpdate,
+            recently_added: false,
+          };
+        } else if (currentPage?.updated == true) {
+          if (oldFile !== newFile) {
+            metadataUpdate = { 
+              ...metadataUpdate,
+              recently_added: false,
+              updated: false,
+            };
+          }
+        }
+      }
+    }
+
+    return {
+      ...state,
+      pageFile: {
+        ...state.pageFile,
+        detail: {
+          data,
+          status: Statuses.Success,
+          error: null,
+        },
+        list: {
+          ...state.pageFile.list,
+          data: {
+            ...state.pageFile.list.data,
+            results: [
+              ...state.pageFile.list.data?.results.slice(0, index ?? 0),
+              {
+                ...state.pageFile.list.data?.results[index ?? 0],
+                ...data,
+                ...metadataUpdate,
+              },
+              ...state.pageFile.list.data?.results.slice((index ?? 0) + 1)
+            ]
+          },
+        }
+      }
+    }
+  }),
+  on(AppActions.getPageFailure, (state, { error }) => ({
+    ...state,
+    pageFile: {
+      ...state.pageFile,
+      detail: {
+        ...state.pageFile.detail,
+        status: Statuses.Failure,
+        error,
+      }
+    }
+  })),
+
+
+  // ...
+  // Delete Page File
+  // ...
+  on(AppActions.deletePage, (state) => ({
+    ...state,
+    pageFile: {
+      ...state.pageFile,
+      delete: {
+        ...state.pageFile.delete,
+        status: Statuses.Loading,
+        error: null,
+      }
+    }
+  })),
+  on(AppActions.deletePageSuccess, (state, { pageId }) => {
+    const newResults = state.pageFile.list.data?.results.filter((item: any) => item.id !== pageId);
+
+    return {
+      ...state,
+      pageFile: {
+        ...state.pageFile,
+        detail: {
+          ...state.pageFile.detail,
+          data: null,
+          error: null,
+        },
+        list: {
+          ...state.pageFile.list,
+          data: {
+            ...state.pageFile.list.data,
+            results: newResults
+          }
+        }
+      }
+    }
+  }),
+  on(AppActions.deletePageFailure, (state, { error }) => ({
+    ...state,
+    pageFile: {
+      ...state.pageFile,
+      detail: {
+        ...state.pageFile.detail,
+        status: Statuses.Failure,
+        error,
+      }
+    }
+  })),
+
+
+  // ...
+  // Update Page File
+  // ...
+  on(AppActions.updatePage, (state, { source}) => ({
+    ...state,
+    pageFile: {
+      ...state.pageFile,
+      update: {
+        ...state.pageFile.update,
+        status: Statuses.Loading,
+        error: null,
+        source,
+      }
+    }
+  })),
+  on(AppActions.updatePageSuccess, (state, { data, pageId, source }) => {
+    const index = state.pageFile.list.data?.results.findIndex((item: any) => item.id === pageId);
+    return {
+      ...state,
+      pageFile: {
+        ...state.pageFile,
+        detail: {
+          data,
+          status: Statuses.Success,
+          error: null,
+        },
+        update: {
+          data,
+          status: Statuses.Success,
+          error: null,
+          source,
+        },
+        list: {
+          ...state.pageFile.list,
+          data: {
+            ...state.pageFile.list.data,
+            results: [
+              ...state.pageFile.list.data?.results.slice(0, index ?? 0),
+              {
+                ...state.pageFile.list.data?.results[index ?? 0],
+                ...data,
+                recently_reuploaded: true,
+              },
+              ...state.pageFile.list.data?.results.slice((index ?? 0) + 1)
+            ],
+            source,
+          },
+        }
+      }
+    }
+  }),
+  on(AppActions.updatePageFailure, (state, { error , source}) => ({
+    ...state,
+    pageFile: {
+      ...state.pageFile,
+      update: {
+        ...state.pageFile.update,
+        status: Statuses.Failure,
+        error,
+        source,
       }
     }
   })),

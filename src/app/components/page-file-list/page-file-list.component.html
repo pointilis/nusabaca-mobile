@@ -1,3 +1,7 @@
+<div class="block mb-2 text-gray-600">
+  <ion-text class="text-sm">Pindai halaman menjadi suara</ion-text>
+</div>
+
 <ion-button shape="round" mode="ios" color="success" (click)="onAddPage()">
   <ion-icon name="camera" slot="start" class="mr-2"></ion-icon>
   Tambah Halaman
@@ -5,6 +9,38 @@
 
 <app-take-photo #takePhotoComponent (photoTaken)="onPhotoTaken($event)"></app-take-photo>
 
-<div class="block mt-2 text-gray-600">
-  <ion-text class="text-sm">Pindai halaman menjadi suara</ion-text>
+<div class="block">
+  @if (pages$ | async; as pages) {
+    @if (pages.status == 'loading') {
+      <div class="flex h-32 flex-col items-center justify-center">
+        <ion-spinner name="crescent" color="dark"></ion-spinner>
+        <p class="mt-2 text-center text-gray-700 text-lg block">Loading pages...</p>
+      </div>
+    } @else if (pages.status == 'error') {
+      <div class="flex h-32 flex-col items-center justify-center">
+        <p class="mt-2 text-center text-red-700 text-lg block">Failed to load pages. Please try again.</p>
+      </div>
+    } @else if (pages.status == 'success' && pages.data?.results?.length > 0) {
+      <div class="mt-10">
+        <div class="block text-left">Playlist Halaman</div>
+        <ion-list>
+          @for (page of pages.data?.results; track page.id) {
+            <app-page-file-item [page]="page" (onReUploadPage)="onReUploadPage($event)" (onEditPage)="onEditPage($event)"></app-page-file-item>
+          }
+        </ion-list>
+      </div>
+    } @else {
+      <div class="flex h-32 flex-col items-center justify-center">
+        <p class="mt-2 text-center text-gray-700 text-lg block">No pages found. Start by adding a new page.</p>
+      </div>
+    }
+  } @else {
+    <div class="flex h-32 flex-col items-center justify-center">
+      <p class="mt-2 text-center text-gray-700 text-lg block">No pages available.</p>
+    </div>
+  }
 </div>
+
+<ion-infinite-scroll #collectionInfinite (ionInfinite)="onIonInfinite($event)" [disabled]="disableInfinite">
+  <ion-infinite-scroll-content></ion-infinite-scroll-content>
+</ion-infinite-scroll>

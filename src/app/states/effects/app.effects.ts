@@ -453,4 +453,132 @@ export class AppEffects {
       })
     ), { dispatch: false }
   );
+
+
+  // ...
+  // Get Pages Effect
+  // ...
+  getPages$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AppActions.getPages),
+      switchMap(({ collectionId, params, source }) => {
+        return this.httpClient.get(Endpoints.AudiobookPages, { params }).pipe(
+          map((response) => {
+            return AppActions.getPagesSuccess({
+              data: response,
+              collectionId,
+              params,
+              source
+            });
+          }),
+          catchError((error: HttpErrorResponse) => {
+            return of(AppActions.getPagesFailure({ error: error, collectionId, params, source }))
+          })
+        );
+      })
+    )
+  );
+
+  getPagesSuccess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AppActions.getPagesSuccess),
+      map(({ data }) => {
+        console.log('Get Pages Successful:', data);
+      })
+    ), { dispatch: false }
+  );
+
+  getPagesFailure$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AppActions.getPagesFailure),
+      map(({ error }) => {
+        console.error('Get Pages Failed:', error);
+      })
+    ), { dispatch: false }
+  );
+
+
+  // ...
+  // Get Page Effect
+  // ...
+  getPage$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AppActions.getPage),
+      switchMap(({ id, source }) => {
+        return this.httpClient.get(Endpoints.RetrieveAudiobookPage.replace(':id', id)).pipe(
+          map((response) => {
+            return AppActions.getPageSuccess({
+              data: response,
+              id,
+              source
+            });
+          }),
+          catchError((error: HttpErrorResponse) => {
+            return of(AppActions.getPageFailure({ error: error, id, source }))
+          })
+        );
+      })
+    )
+  );
+
+  getPageSuccess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AppActions.getPageSuccess),
+      map(({ data }) => {
+        console.log('Get Page Successful:', data);
+      })
+    ), { dispatch: false }
+  );
+
+  getPageFailure$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AppActions.getPageFailure),
+      map(({ error }) => {
+        console.error('Get Page Failed:', error);
+      })
+    ), { dispatch: false }
+  );
+
+
+  // ...
+  // Delete Page Effect
+  // ...
+  deletePage$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AppActions.deletePage),
+      switchMap(({ pageId }) => {
+        this.spinner.show();
+        return this.httpClient.delete(Endpoints.RetrieveAudiobookPage.replace(':id', pageId)).pipe(
+          map(() => {
+            return AppActions.deletePageSuccess({ pageId });
+          }),
+          catchError((error: HttpErrorResponse) => {
+            return of(AppActions.deletePageFailure({ error, pageId }));
+          })
+        );
+      })
+    )
+  );
+  
+  deletePageSuccess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AppActions.deletePageSuccess),
+      map(({ pageId }) => {
+        console.log('Delete Page Successful:', pageId);
+        this.spinner.hide();
+        this.presentToast('Page deleted successfully!', 2000, 'success');
+      })
+    ), { dispatch: false }
+  );
+
+  deletePageFailure$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AppActions.deletePageFailure),
+      map(({ error }) => {
+        console.error('Delete Page Failed:', error);
+        this.spinner.hide();
+        this.presentToast('Failed to delete page.', 2000, 'danger');
+      })
+    ), { dispatch: false }
+  )
 }

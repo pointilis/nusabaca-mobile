@@ -39,5 +39,21 @@ export const AppActions = createActionGroup({
     'Insert Page': props<{ data: IPageFile }>(),
     'Insert Page Success': props<{ data: any }>(),
     'Insert Page Failure': props<{ error: any }>(),
+
+    'Get Pages': props<{ collectionId: string, params: IPagination, source?: string }>(),
+    'Get Pages Success': props<{ data: any, collectionId: string, params: IPagination, source?: string }>(),
+    'Get Pages Failure': props<{ error: any, collectionId: string, params: IPagination, source?: string }>(),
+
+    'Get Page': props<{ id: string, source?: string }>(),
+    'Get Page Success': props<{ data: any, id: string, source?: string }>(),
+    'Get Page Failure': props<{ error: any, id: string, source?: string }>(),
+
+    'Delete Page': props<{ pageId: string }>(),
+    'Delete Page Success': props<{ pageId: string }>(),
+    'Delete Page Failure': props<{ error: any, pageId: string }>(),
+
+    'Update Page': props<{ pageId: string, data: Partial<IPageFile>, source?: string }>(),
+    'Update Page Success': props<{ data: any, pageId: string, source?: string }>(),
+    'Update Page Failure': props<{ error: any, pageId: string, source?: string }>(),
   }
 });

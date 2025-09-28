@@ -13,16 +13,16 @@
   </ion-input>
 
   <div class="mt-4 mb-2 text-gray-600">
-    Jenis suara
+    Suara
   </div>
 
-  <ion-radio-group [(ngModel)]="voiceGender">
+  <ion-radio-group [(ngModel)]="voiceGender" [value]="voiceGender">
     <ion-item lines="none" class="ion-no-padding" [ngStyle]="{'--background': 'transparent', '--ripple-color': 'transparent'}">
-      <ion-radio value="male" labelPlacement="end" justify="start">Laki-laki</ion-radio>
+      <ion-radio value="male" labelPlacement="end" justify="start">Pria</ion-radio>
     </ion-item>
 
     <ion-item lines="none" class="ion-no-padding" [ngStyle]="{'--background': 'transparent', '--ripple-color': 'transparent'}">
-      <ion-radio value="female" labelPlacement="end" justify="start">Perempuan</ion-radio>
+      <ion-radio value="female" labelPlacement="end" justify="start">Wanita</ion-radio>
     </ion-item>
   </ion-radio-group>
   

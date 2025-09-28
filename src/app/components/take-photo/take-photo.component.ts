@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera';
+import { Camera, CameraDirection, CameraResultType, CameraSource, Photo } from '@capacitor/camera';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular/standalone';
 
 @Component({
@@ -48,6 +48,7 @@ export class TakePhotoComponent implements OnInit {
         resultType: CameraResultType.Uri,
         source: CameraSource.Camera,
         saveToGallery: false,
+        direction: CameraDirection.Rear,
       });
 
       await loading.dismiss();

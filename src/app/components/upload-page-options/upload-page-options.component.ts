@@ -1,6 +1,7 @@
 import { NgStyle } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Preferences } from '@capacitor/preferences';
 import { ModalController, IonItem, IonRadio, IonRadioGroup, IonInput, IonButton, IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { albums, cloudUpload, documentText } from 'ionicons/icons';
@@ -26,7 +27,7 @@ export class UploadPageOptionsComponent  implements OnInit {
   @ViewChild('pageNumberInput', { static: false }) pageNumberInput!: IonInput;
 
   pageNumber: string = '';
-  voiceGender: string = 'male';
+  voiceGender: string = '';
 
   constructor(
     private modalCtrl: ModalController,
@@ -36,18 +37,36 @@ export class UploadPageOptionsComponent  implements OnInit {
 
   ngOnInit() {}
 
-  submitOptions() {
+  async submitOptions() {
     this.modalCtrl.dismiss({
       page_number: this.pageNumber,
       voice_gender: this.voiceGender,
     }, 'confirm');
+
+    console.log('Submitted options:', {
+      page_number: this.pageNumber,
+      voice_gender: this.voiceGender,
+    });
+
+    // save the voice options
+    await Preferences.set({
+      key: 'voiceGender',
+      value: this.voiceGender,
+    });
   }
 
-  ngAfterViewInit() {
+  async ngAfterViewInit() {
     console.log('UploadPageOptionsComponent initialized');
     setTimeout(() => {
       this.pageNumberInput.setFocus();
     }, 300);
+
+    // load saved voice options
+    const { value } = await Preferences.get({ key: 'voiceGender' });
+    console.log('Loaded voiceGender from preferences:', value);
+    if (value) {
+      this.voiceGender = value;
+    }
   }
 
 }

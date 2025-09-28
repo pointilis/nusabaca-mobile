@@ -31,7 +31,7 @@ import { InfiniteScrollCustomEvent, IonButton, IonInfiniteScroll, IonInfiniteScr
 export class CollectionListComponent  implements OnInit {
   
   params: IPagination = {
-    limit: 10,
+    limit: 50,
     offset: 0,
   };
   collections$!: Observable<{ data: any; status: string; error: any; }>;

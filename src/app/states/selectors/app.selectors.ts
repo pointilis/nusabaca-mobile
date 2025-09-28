@@ -39,3 +39,15 @@ export const selectPageFileList = createSelector(
     selectState,
     (state: AppState) => state.pageFile.list
 );
+
+// Select pageFile detail
+export const selectPageFileDetail = createSelector(
+    selectState,
+    (state: AppState) => state.pageFile.detail
+);
+
+// Select pageFile update
+export const selectPageFileUpdate = createSelector(
+    selectState,
+    (state: AppState) => state.pageFile.update
+);
